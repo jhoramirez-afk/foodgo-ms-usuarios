@@ -1,0 +1,8 @@
+services:
+  usuarios-svc:
+    build: .
+    image: duoc/jv0101-foodgo-usuarios:1.0.0
+    container_name: foodgo-usuarios-svc
+    ports:
+      - "${PORT:-8081}:8081"
+    restart: unless-stopped
