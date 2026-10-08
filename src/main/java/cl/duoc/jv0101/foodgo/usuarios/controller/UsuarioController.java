@@ -1,5 +1,6 @@
 package cl.duoc.jv0101.foodgo.usuarios.controller;
 
+import cl.duoc.jv0101.foodgo.usuarios.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
         return service.findById(id).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id " + id));
     }
 
     @PostMapping
@@ -45,12 +46,14 @@ public class UsuarioController {
     public ResponseEntity<Usuario> actualizar(@PathVariable Long id,
             @Valid @RequestBody Usuario datos) {
         return service.update(id, datos).map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id " + id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        return service.delete(id) ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+        if (!service.delete(id)) {
+            throw new ResourceNotFoundException("Usuario no encontrado con id " + id);
+        }
+        return ResponseEntity.noContent().build();
     }
 }
