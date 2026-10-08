@@ -1,5 +1,11 @@
 package cl.duoc.jv0101.foodgo.usuarios.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +32,11 @@ public class Usuario {
     @Column
     private String email;
 
+    @Valid
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("usuario-direcciones")
+    private List<Direccion> direcciones = new ArrayList<>();
+
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
@@ -42,4 +53,24 @@ public class Usuario {
 
     public void setEmail(String email) { this.email = email; }
 
+    public List<Direccion> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<Direccion> items) {
+        this.direcciones.clear();
+        if (items != null) {
+            items.forEach(this::addDireccion);
+        }
+    }
+
+    public void addDireccion(Direccion item) {
+        direcciones.add(item);
+        item.setUsuario(this);
+    }
+
+    public void removeDireccion(Direccion item) {
+        direcciones.remove(item);
+        item.setUsuario(null);
+    }
 }
