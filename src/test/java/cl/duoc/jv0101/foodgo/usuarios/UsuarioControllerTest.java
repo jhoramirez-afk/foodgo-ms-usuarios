@@ -41,8 +41,8 @@ class UsuarioControllerTest {
         Usuario r = new Usuario();
         r.setId(id);
         r.setNombre("Demo");
-        r.setRol("valor");
-        r.setEmail("Demo");
+        r.setRol("CLIENTE");
+        r.setEmail("camila.soto@example.com");
         return r;
     }
 
