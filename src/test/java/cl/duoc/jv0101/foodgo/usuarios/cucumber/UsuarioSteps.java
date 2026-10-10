@@ -33,10 +33,10 @@ public class UsuarioSteps {
         return "http://localhost:" + port + "/api/usuarios";
     }
 
-    private HttpEntity<Map<String, String>> body(String valor) {
+    private HttpEntity<Map<String, Object>> body(String valor) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(Map.of("nombre", valor), headers);
+        return new HttpEntity<>(Map.of("nombre", valor, "rol", "CLIENTE", "email", "camila.soto.TEST20261009@example.com"), headers);
     }
 
     @Given("el servicio {string} está disponible")

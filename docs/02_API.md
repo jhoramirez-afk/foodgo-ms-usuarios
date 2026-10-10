@@ -1,48 +1,40 @@
-# Usuario — Contrato de la API REST
+# API REST: usuarios
 
-## Base
+Base local: http://localhost:8081/api. Swagger UI: http://localhost:8081/swagger-ui/index.html.
 
-- **Base path**: `/api/usuarios`
-- **Formato**: JSON — **Puerto**: 8081 (configurable con `PORT`)
+| Método | Ruta | HTTP de éxito |
+|---|---|---:|
+| POST | /usuarios | 201 |
+| GET | /usuarios | 200 |
+| GET | /usuarios/{id} | 200 |
+| PUT | /usuarios/{id} | 200 |
+| DELETE | /usuarios/{id} | 204 |
+| POST | /usuarios/{id}/direcciones | 201 |
+| GET | /usuarios/{id}/direcciones | 200 |
+| GET | /direcciones/{id} | 200 |
+| PUT | /direcciones/{id} | 200 |
+| DELETE | /direcciones/{id} | 204 |
 
-## Recursos
+## Crear entidad principal
 
-| Método | Ruta | Códigos de estado | Descripción |
-|--------|------|-------------------|-------------|
-| GET | `/api/usuarios` | 200 | Lista todos los recursos |
-| GET | `/api/usuarios/{id}` | 200 / 404 | Obtiene un recurso por id |
-| POST | `/api/usuarios` | 201 / 400 | Crea un recurso |
-| PUT | `/api/usuarios/{id}` | 200 / 404 / 400 | Actualiza un recurso |
-| DELETE | `/api/usuarios/{id}` | 204 / 404 | Elimina un recurso |
-
-## Atributos de un recurso
-
-| Campo | Tipo | Obligatorio | Descripción |
-|-------|------|-------------|-------------|
-| id | Long | - | Identificador autogenerado |
-| nombre | String | Sí | Campo principal del recurso |
-| rol | String | No | Campo del dominio |
-| email | String | No | Campo del dominio |
-
-## Ejemplos con curl
-
-```bash
-# Listar
-curl http://localhost:8081/api/usuarios
-
-# Crear
-curl -X POST http://localhost:8081/api/usuarios \
-  -H "Content-Type: application/json" \
-  -d '{"nombre":"Demo"}'
-
-# Obtener por id
-curl http://localhost:8081/api/usuarios/1
-
-# Actualizar
-curl -X PUT http://localhost:8081/api/usuarios/1 \
-  -H "Content-Type: application/json" \
-  -d '{"nombre":"Actualizado"}'
-
-# Eliminar
-curl -X DELETE http://localhost:8081/api/usuarios/1
+```json
+{
+  "nombre": "Camila Soto",
+  "rol": "CLIENTE",
+  "email": "camila.soto.DEMO@example.com"
+}
 ```
+
+## Crear entidad relacionada
+
+```json
+{
+  "alias": "Casa",
+  "calle": "Los Aromos 1450, departamento 302",
+  "comuna": "Ñuñoa"
+}
+```
+
+Usar el ID retornado por la creación del padre. Los ID son generados por la BD. Editar los hijos mediante sus propias rutas. Ver las reglas y los campos calculados en REGLAS_EP02.md.
+
+Errores: 400 para datos o JSON inválidos; 404 para recurso/relación local inexistente; 409 para conflictos de integridad o unicidad cuando corresponda. Un campo demasiado largo devuelve 400. Los mensajes y validationErrors se entregan mediante ApiExceptionHandler.

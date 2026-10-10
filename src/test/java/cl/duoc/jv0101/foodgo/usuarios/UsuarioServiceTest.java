@@ -30,8 +30,8 @@ class UsuarioServiceTest {
         Usuario r = new Usuario();
         r.setId(1L);
         r.setNombre("Demo");
-        r.setRol("valor");
-        r.setEmail("Demo");
+        r.setRol("CLIENTE");
+        r.setEmail("camila.soto@example.com");
         return r;
     }
 
